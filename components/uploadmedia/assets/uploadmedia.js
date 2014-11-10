@@ -18,14 +18,7 @@ jQuery(document).ready(function() {
 	jcf_init_image_upload_controls();
 	
 	// init sortable
-	jQuery('.jcf-upload-field').sortable({
-		handle: 'span.drag-handle',
-		opacity:0.7,
-		placeholder: 'sortable-placeholder',
-		start: function (event, ui) { 
-			ui.placeholder.html('<div class="sort-placheholder"></div>');
-		},
-	});
+	jcf_uploadmedia_sortable();
 });
 function jcf_uploadmedia_send_to_editor( html ){
 	if( jcf_upload_related_field === null ){
@@ -136,4 +129,14 @@ function jcf_init_image_upload_controls( node ){
 		
 		return false;
 	})
+}
+function jcf_uploadmedia_sortable(){
+	jQuery('.jcf-upload-field').sortable({
+		handle: 'span.drag-handle',
+		opacity:0.7,
+		placeholder: 'sortable-placeholder',
+		start: function (event, ui) { 
+			ui.placeholder.html('<div class="sort-placheholder"></div>');
+		},
+	});
 }

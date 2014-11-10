@@ -20,6 +20,9 @@
 	margin:0;
 	position:relative;
 }
+.jcf-relatedcontent-field p{
+	overflow:hidden;
+}
 .jcf-relatedcontent-field p input{
 	width:80%;
 	float:left;
@@ -52,4 +55,18 @@
 }
 .jcf-relatedcontent-field a.jcf_add_more{
 	margin:10px 10px 0 0 !important;
+}
+.jcf-relatedcontent-field .drag-handle{
+	cursor: move;
+	margin-right:5px;
+	background:url(assets/images/icon-move.png) no-repeat 0 0;
+	float:left;
+	width:16px;
+	height:16px;
+	overflow:hidden;
+	text-indent:-9999px;
+	margin:16px 15px 0 7px;
+}
+.jcf-relatedcontent-field .sortable-placeholder{
+	height: 52px;
 }

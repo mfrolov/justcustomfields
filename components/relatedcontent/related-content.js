@@ -92,4 +92,13 @@ jQuery(document).ready(function() {
 		jcf_attach_autocomplete_event( input )
 	})
 	
+	// init sortable
+	node.find('.jcf-relatedcontent-field').sortable({
+		handle: 'span.drag-handle',
+		opacity:0.7,
+		placeholder: 'sortable-placeholder',
+		start: function (event, ui) { 
+			ui.placeholder.html('<div class="sort-placheholder"></div>');
+		},
+	});
 });
