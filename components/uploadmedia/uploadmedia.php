@@ -81,6 +81,7 @@ class Just_Field_Upload extends Just_Field{
 			?>
 			<div class="jcf-upload-row<?php if('00' === $key) echo ' jcf-hide'; ?>">
 				<div class="jcf-upload-container">
+					<span class="drag-handle" >move</span>
 					<?php if( $upload_type == 'image' ) : ?>
 					<div class="jcf-upload-image">
 						<a href="<?php echo $value; ?>" class="jcf-btn" target="_blank"><img src="<?php echo $image; ?>" height="77" alt="" /></a>
