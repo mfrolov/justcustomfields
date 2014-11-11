@@ -13,8 +13,9 @@
 	width:100%;
 	height:80px;
 }
-.jcf-relatedcontent-field .jcf_delete{
+div.jcf_edit_field .jcf-relatedcontent-field .jcf_delete{
 	float:left;
+	margin: 0 0 0 15px;
 }
 #poststuff .inside .jcf-relatedcontent-field p{
 	margin:0;
@@ -23,8 +24,8 @@
 .jcf-relatedcontent-field p{
 	overflow:hidden;
 }
-.jcf-relatedcontent-field p input{
-	width:80%;
+.form-field .jcf-relatedcontent-field p input{
+	width:70%;
 	float:left;
 	margin-left:10px;
 }
@@ -65,7 +66,7 @@
 	height:16px;
 	overflow:hidden;
 	text-indent:-9999px;
-	margin:16px 15px 0 7px;
+	margin:6px 10px 0 7px;
 }
 .jcf-relatedcontent-field .sortable-placeholder{
 	height: 52px;
