@@ -197,9 +197,16 @@ function jcf_get_post_types( $format = 'single' ){
 // add custom scripts for plugin settings page
 function jcf_admin_add_scripts() {
 	wp_register_script(
+			'select2',
+			WP_PLUGIN_URL.'/just-custom-fields/assets/select2/select2.js',
+			array('jquery')
+		);
+	wp_enqueue_script('select2'); 
+	
+	wp_register_script(
 			'just_custom_fields',
 			WP_PLUGIN_URL.'/just-custom-fields/assets/just_custom_fields.js',
-			array('jquery', 'json2', 'jquery-form', 'jquery-ui-sortable')
+			array('jquery', 'json2', 'jquery-form', 'jquery-ui-sortable', 'select2')
 		);
 	wp_enqueue_script('just_custom_fields');
 	
@@ -209,8 +216,11 @@ function jcf_admin_add_scripts() {
 
 // add custom styles for plugin settings page
 function jcf_admin_add_styles() { 
+	wp_register_style('select2-styles', WP_PLUGIN_URL.'/just-custom-fields/assets/select2/select2.css');
+	wp_enqueue_style('select2-styles'); 
 	wp_register_style('jcf-styles', WP_PLUGIN_URL.'/just-custom-fields/assets/styles.css');
 	wp_enqueue_style('jcf-styles'); 
+	
 }
 
 

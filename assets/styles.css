@@ -101,3 +101,17 @@ form.jcform_add_field .ajax-feedback{
 #jcf_fieldsets .sortable_placeholder td{
 	background:#FFFFF0;
 }
+.jcf-options{
+	display: none;
+}
+.jcf-taxonomy{
+	margin: 0;
+	list-style: initial;
+	padding: 0 0 0 30px;
+}
+.jcf-taxonomy-terms{
+	margin: 10px 0 0 15px;
+}
+.jcf-taxonomy-terms{
+	display: none;
+}

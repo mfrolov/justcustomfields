@@ -67,18 +67,21 @@ class Just_Field_Select extends Just_Field{
 		$instance['options'] = strip_tags($new_instance['options']);
 		$instance['description'] = strip_tags($new_instance['description']);
 		$instance['empty_option'] = strip_tags($new_instance['empty_option']);
+		$instance['post_categories'] = $new_instance['post_categories'];
 		return $instance;
 	}
 	/**
 	 *	print settings form for field
 	 */	
 	function form( $instance ) {
+		global $jcf_post_type;
 		//Defaults
 		$instance = wp_parse_args( (array) $instance, array( 'title' => '', 'options' => '', 'empty_option' => '' ) );
 		$title = esc_attr( $instance['title'] );
 		$options = esc_attr( $instance['options'] );
 		$description = esc_html($instance['description']);
 		$empty_option = esc_attr( $instance['empty_option']);
+		$categories = $instance['post_categories'];
 		
 		?>
 		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', JCF_TEXTDOMAIN); ?></label> <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" /></p>
@@ -88,6 +91,55 @@ class Just_Field_Select extends Just_Field{
 		<p><label for="<?php echo $this->get_field_id('empty_option'); ?>"><?php _e('Empty option:', JCF_TEXTDOMAIN); ?></label><input class="widefat" id="<?php echo $this->get_field_id('empty_option'); ?>" name="<?php echo $this->get_field_name('empty_option'); ?>" placeholder="ex. Choose item from the list"" type="text" value="<?php echo $empty_option; ?>" />
 		<br/><small><?php _e('Leave blank to disable empty option', JCF_TEXTDOMAIN); ?></small></p>
 		<p><label for="<?php echo $this->get_field_id('description'); ?>"><?php _e('Description:', JCF_TEXTDOMAIN); ?></label> <textarea name="<?php echo $this->get_field_name('description'); ?>" id="<?php echo $this->get_field_id('description'); ?>" cols="20" rows="4" class="widefat"><?php echo $description; ?></textarea></p>
+		<div class="jcf-visibility">
+			<p>&#9658;<?php _e('Visibility options:', JCF_TEXTDOMAIN); ?></p>
+			<div class="jcf-options">
+				<ul class="jcf-taxonomy">
+					<?php
+						$output = 'objects';
+						$taxonomies = get_taxonomies($args, $output);
+						$i=0;
+						
+						foreach($taxonomies as $single_tax){
+							//remove Navigation Menus, Link Categories, Format from taxonomy list 
+							$exceptions = array('nav_menu', 'link_category', 'post_format');
+							if(in_array($single_tax->name, $exceptions)){
+								continue;
+							}
+							$labels = $single_tax->labels;
+						?>
+					
+						<li data-tax-slug="<?php echo $single_tax->name; ?>">
+							
+							<span><?php echo $labels->name; ?></span>
+							
+							<?php 
+								$terms = get_terms( $single_tax->name, $args );
+								$output = '';
+
+								if(!empty($terms)){
+									$output .= '<select name="'.$this->get_field_name('post_categories').'[]" id="'.$this->get_field_id('post_categories').'[]" multiple class="jcf-taxonomy-terms">';
+										foreach($terms as $single_term){
+											$name = $single_term->name;
+											$slug = $single_term->slug;
+											$selected = '';
+											if(is_array($categories)){
+												if(in_array($slug, $categories)){
+													$selected = 'selected';
+												}
+											}
+											$output .='<option '.$selected.' name="'.$this->get_field_name('post_categories').'['.$i.']" id="'.$this->get_field_id('post_categories').'['.$i.']" value="'.$slug.'">'.$name.'</option>';
+											$i++;
+										}
+									$output .= '</select>';
+								}
+								echo $output;
+							?>
+						</li>
+					<?php }	?>
+				</ul>
+			</div>
+		</div>
 		<?php
 	}
 }

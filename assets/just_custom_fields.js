@@ -5,6 +5,8 @@ jQuery(document).ready(function(){
 	initFieldsetsEdit();
 	initAjaxBoxClose();
 	initFieldsetFields();
+	initVisibilityOptionsSlide();
+	initVisibilitySelect2();
 })
 
 /**
@@ -311,6 +313,28 @@ function jcf_ajax( data, respType, loader, callback ){
 	})	
 }
 
+function initVisibilityOptionsSlide(){
+	var visability_tax = jQuery('.jcf-visibility p');
+	var visibility_terms = jQuery('.jcf-taxonomy > li span');
+	
+	visability_tax.live('click', function(){
+		var options_block = jQuery(this).next('.jcf-options');
+		options_block.slideToggle();
+	});
+	visibility_terms.live('click', function(){
+		var terms_block = jQuery(this).next('.jcf-taxonomy-terms');
+		terms_block.slideToggle();
+	});
+}
+
+function initVisibilitySelect2() {
+	jQuery(document).ajaxComplete(function(){
+		jQuery('.jcf-taxonomy-terms').select2({
+			minimumInputLength: 2,
+		});
+	})
+	
+}
 function pa( mixed ){
 	if( window.console ){
 		window.console.info(mixed);
