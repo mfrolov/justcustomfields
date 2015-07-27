@@ -6,7 +6,7 @@ Author: Alexander Prokopenko
 Author URI: http://justcoded.com/
 Tags: custom, fields, custom fields, meta, post meta, object meta, editor
 Requires at least: 3.0.0
-Tested up to: 4.0
+Tested up to: 4.2.3
 Donate link: http://justcoded.com/just-labs/just-custom-fields-for-wordpress-plugin/#donate
 Stable tag: trunk
 License: GNU General Public License v2
@@ -26,7 +26,8 @@ For now plugin support such field types:
 * Textarea (you can use editor light for it)
 * Date Picker\*
 * Upload Media (for upload files and images)
-* Fields Group (for some table data)
+* Fields Group (for grouped textual data)
+* Table
 * Related Content (to set relation to another Post/Page or Custom Post Type)\*
 
 _\*NOTE: Available **only** for WordPress 3.1+ (Related Content field works in Select mode). WordPress 3.0.\* has old  jQuery/jQuery UI versions and they are not compatible with DatePicker and Autocomplete fields._
@@ -35,6 +36,15 @@ _\*NOTE: Available **only** for WordPress 3.1+ (Related Content field works in S
 http://justcoded.com/just-labs/just-custom-fields-for-wordpress-plugin/
 
 **IMPORTANT** Starting from version 1.4 all fields machine names (slug) will be started from underscore ('_'). This prevent appearing them in standard WordPress Custom fields meta box.
+
+**EXPERIMENTAL FEATURES**
+
+Starting from v2.0b we have new experimental features:
+
+* Ability to set Fields Settings global if you have MultiSite. So you can set them once, without copying all settings to every new site.
+* Ability to save Fields Settings to file system. Directly in the theme. We expect this option will be popular among the developers. It will be much easier to move your fields settings between site versions (dev/production).
+* Export Fields Settings
+* Import Fields Settings
 
 FILL FREE TO CONTACT ME IF YOU FIND ANY BUGS/ISSUES!
 
@@ -68,11 +78,14 @@ get_post_custom()
 == Changelog ==
 * Next release plans
 	* fix thumbs on http auth restricted sites
-	* export/import plugin settings
 	* PHP-Code generators to use in templates when editing custom fields
 	* Shortcodes for WP editor
-	* datepicker date formats
 	* make fieldsets related to categories (show/hide based on category select)
+* Version 2.0b
+	* New: Plugin settings pages were extended.
+	* New: Field Settings landing page design improvements
+	* New: Experimental features: Multisite settings, Field Settings storage place
+	* New: Experimental features: Import/Export
 * Version 1.4.1
 	* Bug fix: select box created with old versions lost it's options (https://github.com/aprokopenko/justcustomfields/issues/31)
 * Version 1.4
