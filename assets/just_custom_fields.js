@@ -7,6 +7,10 @@ jQuery(document).ready(function(){
 	initFieldsetFields();
 	initVisibilityOptionsSlide();
 	initVisibilitySelect2();
+	visibilityOptionShow();
+	addConditionBlock();
+	termsShowOnTaxChange();
+	deleteConditionsRow();
 })
 
 /**
@@ -329,11 +333,70 @@ function initVisibilityOptionsSlide(){
 
 function initVisibilitySelect2() {
 	jQuery(document).ajaxComplete(function(){
-		jQuery('.jcf-taxonomy-terms').select2({
-			minimumInputLength: 2,
+		jQuery('.jcf-taxonomy-terms').not('.hidden').select2({
+			//minimumInputLength: 2,
 		});
 	})
 	
+}
+
+// init visibility condition row add
+jQuery('.jcf-visibility input#jcf_cond_more').click(function(){
+	var tbody = jQuery('#jv_settings tbody');
+	tbody
+		.append( tbody.find('tr:first').clone() )
+		.find('tr:last').removeClass('new_row');
+	return false;
+});
+
+function visibilityOptionShow(){
+	jQuery(document).ajaxComplete(function(){
+			taxonomy_first = jQuery('.taxonomies').children('option:first-child').data('taxonomy');
+			jQuery('.terms-holder').find('div.'+taxonomy_first).addClass('show');
+	});
+}
+
+function addConditionBlock(){
+	jQuery('input.condition-btn').live('click', function(){
+		var prevLi = "";
+		prevLi = jQuery(this).prev('li');
+		
+		jQuery('.conditions-wrapper')
+			.append(jQuery('.conditions-wrapper li:first').clone().removeClass('hidden'));
+	
+		jQuery('.conditions-wrapper li:last').find('select').each(function(){
+			jQuery(this).removeClass('hidden').removeAttr('hidden');
+		});
+		
+		taxonomy_first = jQuery('.conditions-wrapper li:last').find('.taxonomies option:first-child').data('taxonomy');
+		jQuery('.conditions-wrapper li:last').find('.terms-holder select.'+taxonomy_first).addClass('show');
+		jQuery('.conditions-wrapper li:last').find('.terms-holder').children('.jcf-taxonomy-terms').select2({
+			//minimumInputLength: 2,
+		});
+	});
+}
+
+function termsShowOnTaxChange(){
+	jQuery(document).ajaxComplete(function(){
+		var taxonomies = jQuery('.taxonomies');
+		taxonomies.each(function(){
+			var taxonomy = jQuery(this).children('option:selected').data('taxonomy');
+			termsHolder = jQuery(this).next('.terms-holder');
+			termsHolder.children('div').removeClass('show').parent().find('div.'+taxonomy).addClass('show');
+		});
+		taxonomies.live('change', function(){
+			var taxonomy = jQuery(this).children('option:selected').data('taxonomy');
+			var termsHolder = jQuery(this).next('.terms-holder');
+			termsHolder.children('div').removeClass('show').parent().find('div.'+taxonomy).addClass('show');
+		});
+	});
+}
+
+function deleteConditionsRow(){
+	jQuery('.delete-condition').live('click', function(){
+		jQuery(this).parent('li.condition').remove();
+		return false;
+	})
 }
 function pa( mixed ){
 	if( window.console ){

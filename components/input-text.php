@@ -45,6 +45,9 @@ class Just_Field_Input extends Just_Field{
 		//var_dump($new_instance);
 		$instance['title'] = strip_tags($new_instance['title']);
 		$instance['description'] = strip_tags($new_instance['description']);
+		$instance['post_categories'] = $new_instance['post_categories'];
+		$instance['visibility'] = $new_instance['visibility'];
+		
 		return $instance;
 	}
 	
@@ -53,12 +56,55 @@ class Just_Field_Input extends Just_Field{
 	 */	
 	function form( $instance ) {
 		//Defaults
+		pa($instance);
 		$instance = wp_parse_args( (array) $instance, array( 'title' => '', 'description' => '' ) );
 		$description = esc_html($instance['description']);
 		$title = esc_attr( $instance['title'] );
+		$categories = $instance['post_categories'];
+		$visibility = $instance['visibility'];
+		$vis_selected = '';
+		$invis_selected = '';
 		?>
 		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', JCF_TEXTDOMAIN); ?></label> <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" /></p>
 		<p><label for="<?php echo $this->get_field_id('description'); ?>"><?php _e('Description:', JCF_TEXTDOMAIN); ?></label> <textarea name="<?php echo $this->get_field_name('description'); ?>" id="<?php echo $this->get_field_id('description'); ?>" cols="20" rows="4" class="widefat"><?php echo $description; ?></textarea></p>
+		<div class="jcf-visibility">
+			<p>Make this field
+				<select name="<?php echo $this->get_field_name('visibility'); ?>[]" id="<?php echo $this->get_field_id('visibility'); ?>[]">
+					<?php if(!empty($visibility)){
+						//pa($visibility);
+						if($visibility[0] == "visible") {
+							$vis_selected = 'selected'; 
+						}
+						else{
+							$invis_selected = 'selected';
+						}
+					}?>
+					<option value="visible" <?php echo $vis_selected; ?> >Visible</option>
+					<option value="invisible" <?php echo $invis_selected; ?>>Invisible</option>
+				</select>
+			for such criteria:</p>
+			<ul class="conditions-wrapper">
+				<?php for($y=0; $y<2; $y++){
+					if($y==0){
+						$hidden = 'hidden';
+						$this->jfc_visibility_options_print($hidden, $categories);
+					}
+					else{
+						$hidden = '';
+						if(!empty($categories)){
+							foreach($categories as $single_saved_cat=>$term){
+								$this->jfc_visibility_options_print($hidden, $categories, $single_saved_cat, $term, true);
+							}
+						}
+						else{
+							$this->jfc_visibility_options_print($hidden, $categories);
+						}
+					}
+				}
+				?>
+			</ul>
+			<input id="jcf_cond_more" type="button" class="button-secondary condition-btn" value="Add one more">
+		</div>
 		<?php
 	}
 	

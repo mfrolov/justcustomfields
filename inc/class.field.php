@@ -380,6 +380,75 @@ class Just_Field{
 		return 'noform';
 	}
 	
+	/**
+	 * Creating HTML block for visibility options
+	 * 
+	 * @param type $hidden
+	 * @param type $categories
+	 * @param type $single_saved_cat
+	 * @param type $term
+	 * @param type $disabled_flag
+	 * 
+	 */
+	function jfc_visibility_options_print($hidden, $categories, $single_saved_cat = null, $term = null, $disabled_flag = false){
+		
+		$output_format = 'objects';
+		$taxonomies = get_taxonomies($args, $output_format);
+		$output = '';
+		$output_tax = '';
+		$output_terms = '';
+		$terms ='';
+		if($disabled_flag == true){
+			$disabled = 'disabled';
+		}
+		$output .= '<li class="condition '.$hidden.'">';
+		if($disabled_flag == true){
+			$output .= '<a href="#" class="delete-condition"></a>';
+		}
+		$output .= '<span>Taxonomy condition:</span>';
+		$output .= '<div class="condition-block">Taxonomy';
+			$output_tax .= '<select '.$disabled.' name="taxonomy"  id="taxonomy-select" class="taxonomies '.$hidden.'" '.$hidden.'>';
+			foreach($taxonomies as $key=>$single_tax){
+				$selected_tax = '';
+				//remove Navigation Menus, Link Categories, Format from taxonomy list 
+				$exceptions = array('nav_menu', 'link_category', 'post_format');
+				if(in_array($single_tax->name, $exceptions)){
+					continue;
+				}
+				if($single_tax->name == $single_saved_cat){
+					$selected_tax = 'selected';
+				}
+				$name = $single_tax->labels->name;
+				$output_tax .= '<option '.$selected_tax.' data-taxonomy="'.$key.'" name="taxonomy" id="taxonomy" value="'.$key.'">'.$name.'</option>';
+
+				//Get terms for each taxonomy available
+				$terms = get_terms($single_tax->name, $args );
+				if(!empty($terms)){
+					$output_terms .= '<select name="'.$this->get_field_name('post_categories').'['.$key.'][]" id="'.$this->get_field_id('post_categories').'['.$key.'][]" multiple class="jcf-taxonomy-terms '.$key.' '.$hidden.'" '.$hidden.'>';
+					$i=0;
+						foreach($terms as $single_term){
+							$name = $single_term->name;
+							$slug = $single_term->slug;
+							$selected = '';
+							if(is_array($categories) && !empty($categories[$key]) && empty($hidden)){
+								if(in_array($slug, $categories[$key])){
+									$selected = 'selected';
+								}
+							}
+							$output_terms .='<option '.$selected.' name="'.$this->get_field_name('post_categories').'['.$key.']['.$i.']" id="'.$this->get_field_id('post_categories').'['.$key.']['.$i.']" value="'.$slug.'">'.$name.'</option>';
+							$i++;
+						}
+					$output_terms .= '</select>';
+				}
+			}
+			$output .= $output_tax;
+			$output .= '</select>';
+			$output .= '<div class="terms-holder">';
+			$output .= $output_terms;
+			$output .= '</div></div></li>';
+			echo $output;
+	}
+	
 	
 }
 

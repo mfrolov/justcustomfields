@@ -68,6 +68,8 @@ class Just_Field_Select extends Just_Field{
 		$instance['description'] = strip_tags($new_instance['description']);
 		$instance['empty_option'] = strip_tags($new_instance['empty_option']);
 		$instance['post_categories'] = $new_instance['post_categories'];
+		$instance['visibility'] = $new_instance['visibility'];
+			
 		return $instance;
 	}
 	/**
@@ -82,8 +84,10 @@ class Just_Field_Select extends Just_Field{
 		$description = esc_html($instance['description']);
 		$empty_option = esc_attr( $instance['empty_option']);
 		$categories = $instance['post_categories'];
+		$visibility = $instance['visibility'];
 		
 		?>
+
 		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', JCF_TEXTDOMAIN); ?></label> <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" /></p>
 		<p><label for="<?php echo $this->get_field_id('options'); ?>"><?php _e('Options:', JCF_TEXTDOMAIN); ?></label> 
 		<textarea class="widefat" id="<?php echo $this->get_field_id('options'); ?>" name="<?php echo $this->get_field_name('options'); ?>" ><?php echo $options; ?></textarea>
@@ -92,53 +96,33 @@ class Just_Field_Select extends Just_Field{
 		<br/><small><?php _e('Leave blank to disable empty option', JCF_TEXTDOMAIN); ?></small></p>
 		<p><label for="<?php echo $this->get_field_id('description'); ?>"><?php _e('Description:', JCF_TEXTDOMAIN); ?></label> <textarea name="<?php echo $this->get_field_name('description'); ?>" id="<?php echo $this->get_field_id('description'); ?>" cols="20" rows="4" class="widefat"><?php echo $description; ?></textarea></p>
 		<div class="jcf-visibility">
-			<p>&#9658;<?php _e('Visibility options:', JCF_TEXTDOMAIN); ?></p>
-			<div class="jcf-options">
-				<ul class="jcf-taxonomy">
-					<?php
-						$output = 'objects';
-						$taxonomies = get_taxonomies($args, $output);
-						$i=0;
-						
-						foreach($taxonomies as $single_tax){
-							//remove Navigation Menus, Link Categories, Format from taxonomy list 
-							$exceptions = array('nav_menu', 'link_category', 'post_format');
-							if(in_array($single_tax->name, $exceptions)){
-								continue;
+			<p>Make this field
+				<select name="<?php echo $this->get_field_name('visibility'); ?>[]" id="<?php echo $this->get_field_id('visibility'); ?>[]">
+					<option value="visible">Visible</option>
+					<option value="invisible">Invisible</option>
+				</select>
+			for such criteria:</p>
+			<ul class="conditions-wrapper">
+				<?php for($y=0; $y<2; $y++){
+					if($y==0){
+						$hidden = 'hidden';
+						$this->jfc_visibility_options_print($hidden, $categories);
+					}
+					else{
+						$hidden = '';
+						if(!empty($categories)){
+							foreach($categories as $single_saved_cat=>$term){
+								$this->jfc_visibility_options_print($hidden, $categories, $single_saved_cat, $term, true);
 							}
-							$labels = $single_tax->labels;
-						?>
-					
-						<li data-tax-slug="<?php echo $single_tax->name; ?>">
-							
-							<span><?php echo $labels->name; ?></span>
-							
-							<?php 
-								$terms = get_terms( $single_tax->name, $args );
-								$output = '';
-
-								if(!empty($terms)){
-									$output .= '<select name="'.$this->get_field_name('post_categories').'[]" id="'.$this->get_field_id('post_categories').'[]" multiple class="jcf-taxonomy-terms">';
-										foreach($terms as $single_term){
-											$name = $single_term->name;
-											$slug = $single_term->slug;
-											$selected = '';
-											if(is_array($categories)){
-												if(in_array($slug, $categories)){
-													$selected = 'selected';
-												}
-											}
-											$output .='<option '.$selected.' name="'.$this->get_field_name('post_categories').'['.$i.']" id="'.$this->get_field_id('post_categories').'['.$i.']" value="'.$slug.'">'.$name.'</option>';
-											$i++;
-										}
-									$output .= '</select>';
-								}
-								echo $output;
-							?>
-						</li>
-					<?php }	?>
-				</ul>
-			</div>
+						}
+						else{
+							$this->jfc_visibility_options_print($hidden, $categories);
+						}
+					}
+				}
+				?>
+			</ul>
+			<input id="jcf_cond_more" type="button" class="button-secondary condition-btn" value="Add one more">
 		</div>
 		<?php
 	}

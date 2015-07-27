@@ -48,20 +48,77 @@
 	 */
 	function jcf_post_show_custom_fields( $post = NULL, $box = NULL ){
 		$fieldset = $box['args'][0];
+		$terms = array();
+		$taxonomies = get_taxonomies();
+		
+		//Get all terms of the taxonomy that are attached to the post.
+		foreach($taxonomies as $single_tax){
+			$terms_obj = get_the_terms($post->ID, $single_tax);
+			if(!empty($terms_obj)){
+				foreach($terms_obj as $single_term){
+					$terms[] = $single_term->slug;
+				}
+			}
+		}
 		
 		foreach($fieldset['fields'] as $field_id => $enabled){
 			if( !$enabled ) continue;
 			
 			$field_obj = jcf_init_field_object($field_id, $fieldset['id']);
 			$field_obj->set_post_ID( $post->ID );
+			$field_obj_taxonomies = $field_obj->instance['post_categories'];
+			$field_obj_visibility = $field_obj->instance['visibility'][0];
+			$data_taxonomy = '';
+			$data_terms = '';
 			
-			echo '<div id="jcf_field-'.$field_id.'" class="jcf_edit_field ' . $field_obj->field_options['classname'] . '">'."\r\n";
+			$match = false;
+			if(!empty($field_obj_taxonomies) && is_array($field_obj_taxonomies)){
+				foreach($field_obj_taxonomies as $jcf_tax => $jcf_terms){
+					if (!next($field_obj_taxonomies)) {
+						$data_taxonomy .= $jcf_tax;
+						$data_terms .= implode(',',$jcf_terms);
+					}
+					else{
+						$data_taxonomy .= $jcf_tax.',';
+						$data_terms .= implode(',',$jcf_terms).',';
+					}
+				}
+//				pa($data_taxonomy);
+//				pa($data_term);
+			}
+			
+//			if(in_array('visible', $field_obj->instance['visibility'])){
+//				
+//				foreach($field_obj->instance['post_categories'] as $taxonomy_terms){
+//					
+//					$checker = array_intersect($taxonomy_terms, $terms);
+//					
+//					if(!(empty($checker))){
+//						$match = true;
+//						break;
+//					}
+//				}
+//			}
+//			else{
+//				foreach($field_obj->instance['post_categories'] as $taxonomy_terms){
+//					
+//					$checker = array_intersect($taxonomy_terms, $terms);
+//					
+//					if((empty($checker))){
+//						$match = true;
+//						break;
+//					}
+//				}
+//			}
+//			if($match == true){
+				echo '<div id="jcf_field-'.$field_id.'" class="jcf_edit_field ' . $field_obj->field_options['classname'] . ' '.$field_obj_visibility.'" data-visibility="'.$field_obj_visibility.'" data-taxonomy="'.$data_taxonomy.'" data-terms="'.$data_terms.'">'."\r\n";
 
-			$args = $field_obj->field_options;
-			$field_obj->field( $args );
+				$args = $field_obj->field_options;
+				$field_obj->field( $args );
 
-			echo "\r\n </div> \r\n";
-		}
+				echo "\r\n </div> \r\n";
+			}
+//		}
 		unset($field_obj);
 		
 		// Use nonce for verification
@@ -115,14 +172,12 @@
 	 *	add custom scripts to post edit page
 	 */
 	function jcf_edit_post_scripts(){
-		/*
 		wp_register_script(
 				'jcf_edit_post',
 				WP_PLUGIN_URL.'/just-custom-fields/assets/edit_post.js',
 				array('jquery')
 			);
 		wp_enqueue_script('jcf_edit_post');
-		*/
 		do_action('jcf_admin_edit_post_scripts');
 	}
 

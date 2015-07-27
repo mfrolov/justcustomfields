@@ -223,7 +223,4 @@ function jcf_admin_add_styles() {
 	
 }
 
-
-
-
 ?>

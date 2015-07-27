@@ -89,3 +89,12 @@ div.jcf_edit_field .wp-editor-wrap{
 div.jcf_edit_field .quicktags-toolbar input{
 	width:auto;
 }
+.jcf_edit_field.visible{
+	display: none;
+}
+.jcf_edit_field.hide{
+	display:none;
+}
+.jcf_edit_field.show{
+	display:block;
+}

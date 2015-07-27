@@ -104,6 +104,20 @@ form.jcform_add_field .ajax-feedback{
 .jcf-options{
 	display: none;
 }
+.jcf-visibility .condition{
+	position: relative;
+	
+}
+.jcf-visibility .delete-condition{
+	position: absolute;
+	right: 0;
+	top:0;
+	display: block;
+	width: 20px;
+	height: 20px;
+	text-decoration: none;
+	background: url(icon-delete.png) no-repeat 50% 50%;
+}
 .jcf-taxonomy{
 	margin: 0;
 	list-style: initial;
@@ -114,4 +128,8 @@ form.jcform_add_field .ajax-feedback{
 }
 .jcf-taxonomy-terms{
 	display: none;
+	width: 75%;
+}
+.jcf-taxonomy-terms.show{
+	display: block;
 }
